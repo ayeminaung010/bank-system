@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+D:/clone git/Bank/bank.h
+iostream
+D:/clone git/Bank/iostream
+ctime
+D:/clone git/Bank/ctime
+
+D:/clone git/Bank/bankAdmin.cpp
+iostream
+D:/clone git/Bank/iostream
+bank.h
+D:/clone git/Bank/bank.h
+fstream
+D:/clone git/Bank/fstream
+
