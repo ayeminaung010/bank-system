@@ -10,6 +10,7 @@ using namespace std;
 
 void bank::welcome() {
     cout<<"Welcome From Our Bank"<<endl;
+    loadingAdminData();
     loadingUserData();
     toShowAdminList();
     mainMenu();
@@ -24,9 +25,11 @@ void bank::mainMenu() {
     }else if(main_option == "2"){
         Register();
     }else if(main_option == "3"){
+        cout<<"Bye Bye\nThank You"<<endl;
         exit(1);
     }else{
         cout<<"Invalid Input"<<endl;
+        mainMenu();
     }
 }
 
@@ -40,7 +43,7 @@ void bank::login() {
     int admin_status = toCheckAdmin(lusername);
     while (admin_status == -1){
         int status = toCheckUserName(lusername);
-        while (status != -1){
+        if (status != -1){
             cout<<"Found username..\nEnter password to login for "<<lusername<<endl;
             cin>>lpassword;
             while (count != 3){
@@ -59,6 +62,9 @@ void bank::login() {
                 count =0;
                 option_login();
             }
+        }else{
+            cout<<"Username not Found.."<<endl;
+            option_login();
         }
     }
     while (admin_status != -1){
@@ -74,7 +80,7 @@ void bank::login() {
                 break;
             }
         }
-        if(count == 3){
+        while (count == 3){
             cout<<"You wrong 3 times"<<endl;
             count =0;
             option_login();
@@ -91,6 +97,7 @@ void bank::option_login() {
     }else if(l_option == "2"){
         mainMenu();
     }else if(l_option == "3"){
+        cout<<"Bye Bye"<<endl;
         exit(1);
     }else{
         cout<<"Invalid Input"<<endl;
@@ -138,6 +145,7 @@ void bank::Register() {
     }else if(r_option == "2") {
         Register();
     }else{
+        cout<<"Bye Bye "<<endl;
         exit(1);
     }
 
@@ -219,7 +227,72 @@ int bank::toCheckUserName(string u_name) {
 }
 
 void bank::user_view() {
+    string user_option;
     cout<<"Welcome Page "<<endl;
+    cout<<"Press 1 to go Exchange\nPress 2 to manage account\nPress 3 to see balance\nPress 4 to see account details\nPress 5 to Exit "<<endl;
+    cin>>user_option;
+    if(user_option == "1"){
+        exchange();
+    }else if(user_option == "2"){
+        manageAcc();
+    }else if(user_option == "3"){
+        showBalance();
+    }else if(user_option == "4"){
+        accountDetails();
+    }else if(user_option == "5"){
+        cout<<"Bye Bye\nThank You"<<endl;
+        exit(1);
+    }else{
+        cout<<"Invalid Input"<<endl;
+        user_view();
+    }
+}
+
+void bank::exchange() {
+    string exchange_option;
+    cout<<"This is exchange page"<<endl;
+    cout<<"Press 1 to Withdraws money\nPress 2 Transfer money\nPress 3 to Top up Bills\nPress 4 go back\nPress 5 to see History\nPress 6 to Quit"<<endl;
+    cin>>exchange_option;
+    if(exchange_option == "1"){
+        withdrawsMoney();
+    }else if(exchange_option == "2"){
+        transferMoney();
+    }else if(exchange_option == "3"){
+        topUpBills();
+    }else if(exchange_option == "4"){
+        user_view();
+    }else if (exchange_option == "5"){
+        cout<<"Bye Bye\nThank you"<<endl;
+        exit(1);
+    }else {
+        cout<<"Invalid Input"<<endl;
+        exchange();
+    }
+}
+
+void bank::withdrawsMoney() {
+
+}
+
+void bank::transferMoney() {
+
+
+}
+
+void bank::topUpBills() {
+
+
+}
+
+void bank::manageAcc() {
+
+}
+
+void bank::showBalance() {
+
+}
+
+void bank::accountDetails() {
 
 }
 

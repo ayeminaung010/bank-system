@@ -42,7 +42,7 @@ namespace N{
         void welcome();
         void mainMenu();
 
-        [[noreturn]] void login();
+        void login();
         void Register();
         void toRecordUserData();
         int toCheckUserName(string u_name);
@@ -50,6 +50,13 @@ namespace N{
         void option_login();
 
         void user_view();
+        void exchange();
+        void withdrawsMoney();
+        void transferMoney();
+        void topUpBills();
+        void manageAcc();
+        void showBalance();
+        void accountDetails();
 
         //for admin
         //variable declare
@@ -68,6 +75,8 @@ namespace N{
         void loadingAdminData();
         void admin_view();
         void toShowAdminList();
+        void addNewAdmin();
+        void option_addNewAdmin();
     };
 }
 
