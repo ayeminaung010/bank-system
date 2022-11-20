@@ -12,6 +12,7 @@ void bank::welcome() {
     cout<<"Welcome From Our Bank"<<endl;
     loadingAdminData();
     loadingUserData();
+    toShowUserList();
     toShowAdminList();
     mainMenu();
 }
@@ -80,7 +81,7 @@ void bank::login() {
                 break;
             }
         }
-        while (count == 3){
+        if (count == 3){
             cout<<"You wrong 3 times"<<endl;
             count =0;
             option_login();
@@ -130,7 +131,7 @@ void bank::Register() {
                 amountIndex++;
                 idIndex++;
                 toRecordUserData();
-                login();
+                mainMenu();
             }else{
                 cout<<"Password not match"<<endl;
                 break;
@@ -203,7 +204,7 @@ void bank::loadingUserData() {
                         arrTime[timeIndex] = data;
                         timeIndex++;
                         data = "";
-                        count++;
+                        count = 0;
                     }
                 }else{
                     string st(1,ch);
@@ -229,7 +230,7 @@ int bank::toCheckUserName(string u_name) {
 void bank::user_view() {
     string user_option;
     cout<<"Welcome Page "<<endl;
-    cout<<"Press 1 to go Exchange\nPress 2 to manage account\nPress 3 to see balance\nPress 4 to see account details\nPress 5 to Exit "<<endl;
+    cout<<"Press 1 to go Exchange\nPress 2 to manage account\nPress 3 to see balance\nPress 4 to see account details\nPress 5 to log out\nPress 6 to  Quit"<<endl;
     cin>>user_option;
     if(user_option == "1"){
         exchange();
@@ -240,6 +241,8 @@ void bank::user_view() {
     }else if(user_option == "4"){
         accountDetails();
     }else if(user_option == "5"){
+        mainMenu();
+    }else if(user_option == "6"){
         cout<<"Bye Bye\nThank You"<<endl;
         exit(1);
     }else{
@@ -251,7 +254,7 @@ void bank::user_view() {
 void bank::exchange() {
     string exchange_option;
     cout<<"This is exchange page"<<endl;
-    cout<<"Press 1 to Withdraws money\nPress 2 Transfer money\nPress 3 to Top up Bills\nPress 4 go back\nPress 5 to see History\nPress 6 to Quit"<<endl;
+    cout<<"Press 1 to Withdraws money\nPress 2 Transfer money\nPress 3 to Top up Bills\nPress 4 see Transition History\nPress 5 to fill money\nPress 6 to go back\nPress 7 to Quit"<<endl;
     cin>>exchange_option;
     if(exchange_option == "1"){
         withdrawsMoney();
@@ -260,8 +263,12 @@ void bank::exchange() {
     }else if(exchange_option == "3"){
         topUpBills();
     }else if(exchange_option == "4"){
+        user_transition();
+    }else if(exchange_option == "5"){
+        fill_money();
+    }else if(exchange_option == "6"){
         user_view();
-    }else if (exchange_option == "5"){
+    }else if (exchange_option == "7"){
         cout<<"Bye Bye\nThank you"<<endl;
         exit(1);
     }else {
@@ -271,28 +278,257 @@ void bank::exchange() {
 }
 
 void bank::withdrawsMoney() {
-
+    string w_amount;
+    cout<<"This is Withdraws Page"<<endl;
+    cout<<"Your balance is : "<<arrAmount[current_index]<<endl;
+    if(stoi(arrAmount[current_index] ) != 1000){
+        cout<<"Enter amount you want withdraws..."<<endl;
+        cin>>w_amount;
+        if(stoi(w_amount) <= stoi(arrAmount[current_index])- 1000){
+            int newAmount = stoi(arrAmount[current_index]) - stoi(w_amount);
+            arrAmount[current_index] = to_string(newAmount);
+            toRecordUserData();
+            cout<<"Successfully Withdraws"<<endl;
+            exchange();
+        }else{
+            cout<<"You cannot withdraws "<<endl;
+            exchange();
+        }
+    }else{
+        cout<<"You don't have sufficient balance to Withdraws"<<endl;
+        exchange();
+    }
 }
 
-void bank::transferMoney() {
+[[noreturn]] void bank::transferMoney() {
+    string t_name;
+    string t_amount;
+    cout<<"Your Balance is :"<<arrAmount[current_index]<<endl;
+    cout<<"Enter username you want transfer :"<<endl;
+    cin>>t_name;
+    int status = toCheckUserName(t_name);
 
+    if(status == -1){
+        cout<<"Username not found"<<endl;
+        exchange();
+    }else if(arrUsername[current_index] == arrUsername[status]){
+        cout<<"You cannot Transfer yourself"<<endl;
+        exchange();
+    }else {
+        while (true){
+            cout<<"Found username..:"<<arrUsername[status]<<endl;
+            cout<<"Enter amount :"<<endl;
+            cin>>t_amount;
+            while (stoi(t_amount) >= stoi(arrAmount[current_index]) - 1000){
+                cout<<"You cannot transfer your all amounts"<<endl;
+                break;
+            }
+            if(stoi(t_amount) < stoi(arrAmount[current_index]) - 1000){
+                cout<<"Successfully Transferred to =>"<<t_name<<endl;
+                toRecordTransition(t_amount,t_name);
+                int n_amount = stoi(arrAmount[current_index]) - stoi(t_amount);
+                arrAmount[current_index] = to_string(n_amount); //current user
 
+                int t_user_amount  = stoi(arrAmount[status]) + stoi(t_amount);
+                arrAmount[status] = to_string(t_user_amount);//transfer user
+                toRecordUserData();
+                exchange();
+            }
+        }
+    }
+}
+
+void bank::toRecordTransition(string tamount,string tname) {
+
+    string AdminDataFile = "RecordTransitionAll.txt";
+    ofstream outfile;
+    outfile.open(AdminDataFile,ios::app);
+    if(outfile.is_open()){
+        string  toRecord = arrUsername[current_index] +" : "+ tamount+" " + "SuccessFully Transferred to ==>>"+ tname +" " + to_string(1900 + ltm->tm_year )+"-"+
+                           to_string( 1 + ltm->tm_mon) +"-"+ to_string(ltm->tm_mday) + "-"+ to_string(ltm->tm_hour) +":" +
+                           to_string(ltm->tm_min) + ":" + to_string(ltm->tm_sec) +" \n";
+        outfile<<toRecord;
+    }else{
+        cout<<"cannot open file"<<endl;
+        exit(1);
+    }
+    //for user
+    string userDataFile = arrId[current_index]+"-ForTransition.txt";
+    ofstream outfile1;
+    outfile1.open(userDataFile,ios::app);
+    if(outfile1.is_open()){
+        string  toRecord = arrUsername[current_index] +" : "+ tamount+" " + "SuccessFully Transferred to ==>>"+ tname +" " + to_string(1900 + ltm->tm_year )+"/"+
+                           to_string( 1 + ltm->tm_mon) +"/"+ to_string(ltm->tm_mday) + "/"+ to_string(ltm->tm_hour) +":" +
+                           to_string(ltm->tm_min) + ":" + to_string(ltm->tm_sec) +" \n";
+        outfile1<<toRecord;
+    }else{
+        cout<<"cannot open file"<<endl;
+        exit(1);
+    }
 }
 
 void bank::topUpBills() {
+    string ph_num;
+    string amount;
+    cout<<"Your Balance is :"<<arrAmount[current_index]<<endl;
+    cout<<"Enter Phone number :"<<endl;
+    cin>>ph_num;
+    cout<<"Enter amount :"<<endl;
+    cin>>amount;
+    if (stoi(arrAmount[current_index]) != 1000){
+        int n_amount = stoi(arrAmount[current_index]) - stoi(amount);
+        arrAmount[current_index] = to_string(n_amount);
+        toRecordUserData();
+        cout<<"Top up Success ... "<<endl;
+        exchange();
+    }else{
+        cout<<"You don't have sufficient balance to top up"<<endl;
+        exchange();
+    }
+}
 
-
+void bank::fill_money() {
+    string amount;
+    cout<<"Enter amount you want to Fill"<<endl;
+    cin>>amount;
+    int n_amount = stoi(arrAmount[current_index]) + stoi(amount);
+    arrAmount[current_index] = to_string(n_amount);
+    cout<<"Filled amount Successfully"<<endl;
+    toRecordUserData();
+    exchange();
 }
 
 void bank::manageAcc() {
+    string m_option;
+    cout<<"Press 1 to Exit\nPress 2 to change username\nPress 3 to change password\nPress 4 to go back"<<endl;
+    cin>>m_option;
+    if(m_option == "1"){
+        cout<<"Bye Bye"<<endl;
+        exit(1);
+    }else if(m_option == "2"){
+        change_username(arrUsername[current_index]);
+    }else if(m_option == "3"){
+        change_password(arrUsername[current_index]);
+    }else if(m_option == "4"){
+        user_view();
+    }else{
+        cout<<"Invalid input"<<endl;
+        manageAcc();
+    }
+}
+
+void bank::change_username(string uname) {
+    string n_username;
+    int admin_status = toCheckAdmin(uname);
+
+    while (admin_status == -1 ){
+        cout<<"Enter new username for :"<<uname<<endl;
+        cin>>n_username;
+        int status = toCheckUserName(n_username);
+        while (true){
+            if(status == -1 ){
+                arrUsername[current_index] = n_username;
+                cout<<"Updated username Successs..:"<<arrUsername[current_index]<<endl;
+                toRecordUserData();
+                manageAcc();
+            }else{
+                cout<<"Username already exits"<<endl;
+                break;
+            }
+        }
+    }
+    while (admin_status != -1){
+        cout<<"Enter new username for :"<<_arr_admin_username[admin_status]<<endl;
+        cin>>n_username;
+        int status = toCheckAdmin(n_username);
+        while (true){
+            if(status == -1){
+                _arr_admin_username[admin_status] = n_username;
+                cout<<"Updated admin's username :"<<_arr_admin_username[admin_status]<<endl;
+                toRecordAdminData();
+                admin_view();
+            }else{
+                cout<<"Username already exits in Admin Team"<<endl;
+                break;
+            }
+        }
+    }
+}
+
+void bank::change_password(string uname) {
+    string n_pass;
+    string c_pass;
+    string confirm_pass;
+    int admin_status = toCheckAdmin(uname);
+
+    while (admin_status == -1 ){
+        cout<<"Enter current password for :"<<uname<<endl;
+        cin>>c_pass;
+        while (c_pass == arrPassword[current_index]){
+            cout<<"Enter new password :"<<endl;
+            cin>>n_pass;
+            cout<<"Confirm new password :"<<endl;
+            cin>>confirm_pass;
+            if(n_pass == confirm_pass){
+                arrPassword[current_index] = n_pass;
+                cout<<"Updated password Success..:"<<endl;
+                toRecordUserData();
+                manageAcc();
+            }else{
+                cout<<"Password not match.."<<endl;
+                break;
+            }
+        }
+    }
+    while (admin_status != -1){
+        cout<<"Enter current password for :"<<uname<<endl;
+        cin>>c_pass;
+        while (c_pass == _arr_admin_password[admin_status]){
+            cout<<"Enter new password :"<<endl;
+            cin>>n_pass;
+            cout<<"Confirm new password :"<<endl;
+            cin>>confirm_pass;
+            if(n_pass == confirm_pass){
+                _arr_admin_password[admin_status] = n_pass;
+                cout<<"Updated password Success..:"<<endl;
+                toRecordAdminData();
+                admin_view();
+            }else{
+                cout<<"Password not match.."<<endl;
+                break;
+            }
+        }
+    }
 
 }
 
 void bank::showBalance() {
+    cout<<"Your Balance is :"<<arrAmount[current_index]<<endl;
 
+    exchange();
 }
 
 void bank::accountDetails() {
-
+    cout<<"Username :"<<arrUsername[current_index]<<endl;
+    cout<<"Password :"<<arrPassword[current_index]<<endl;
+    cout<<"Balance :"<<arrAmount[current_index]<<endl;
+    cout<<"_____________________________________"<<endl;
+    user_view();
 }
 
+void bank::user_transition() {
+    string userDataFile = arrId[current_index]+"-ForTransition.txt";
+
+    string userTransition;
+    ifstream History(userDataFile);
+    if(History.is_open()){
+        while (getline(History,userTransition)){
+            cout<<userTransition<<endl;
+        }
+        cout<<"__________________________________"<<endl;
+        History.close();
+    }else{
+        cout<<"No data found!!\nCannot open file!"<<endl;
+        exchange();
+    }
+}

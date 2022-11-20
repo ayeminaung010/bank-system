@@ -30,7 +30,6 @@ void bank::toRecordAdminData() {
         cout<<"cannot open file"<<endl;
         exit(1);
     }
-
 }
 void bank::loadingAdminData() {
     string userDataFile = "admin.txt";
@@ -71,8 +70,8 @@ void bank::loadingAdminData() {
 }
 
 void bank::toShowAdminList() {
-    for (int j = 0; j < _admin_nameIndex; ++j) {
-        cout<<"admin name: "<<_arr_admin_username[j]<<" pw: "<<_arr_admin_password[j]<<endl;
+    for (int j = 1; j < _admin_nameIndex; ++j) {
+        cout<<"admin name: "<<_arr_admin_username[j]<<" password: "<<_arr_admin_password[j]<<endl;
     }
 }
 
@@ -80,17 +79,21 @@ void bank::toShowAdminList() {
 void bank::admin_view() {
     string admin_option;
     cout<<"This is Admin Dashboard"<<endl;
-    cout<<"Press 1 to manage user\nPress 2 to see admin Lists\nPress 3 to see Transition Details\nPress 4 to Add new Admin\nPress 5 to exit "<<endl;
+    cout<<"Press 1 to manage user\nPress 2 to see admin Lists\nPress 3 to see Transition Details\nPress 4 to Add new Admin\nPress 5 to Update account\nPress 6 to exit "<<endl;
     cin>>admin_option;
     if(admin_option == "1"){
-
+        manage_user();
     }else if(admin_option == "2"){
         toShowAdminList();
+        admin_view();
     }else if(admin_option == "3"){
-
+        transitionDetails();
+        admin_view();
     }else if(admin_option == "4"){
         addNewAdmin();
     }else if(admin_option == "5"){
+
+    }else if(admin_option == "6"){
         cout<<"Bye By Admin"<<endl;
         exit(1);
     }else{
@@ -148,5 +151,28 @@ void bank::option_addNewAdmin() {
     }else {
         cout<<"Invalid input"<<endl;
         option_addNewAdmin();
+    }
+}
+
+void bank::toShowUserList() {
+    for (int i = 0; i < userNameIndex; ++i) {
+        cout<<"Username is :"<<arrUsername[i]<<" "<<"Password : "<<arrPassword[i]<<endl;
+    }
+}
+
+void bank::transitionDetails() {
+    string AdminDataFile = "RecordTransitionAll.txt";
+
+    string allTransition;
+    ifstream History(AdminDataFile);
+    if(History.is_open()){
+        while (getline(History,allTransition)){
+            cout<<allTransition<<endl;
+        }
+        cout<<"__________________________________"<<endl;
+        History.close();
+    }else{
+        cout<<"No data found!!\nCannot open file!"<<endl;
+        exchange();
     }
 }

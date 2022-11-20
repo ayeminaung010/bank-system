@@ -52,11 +52,16 @@ namespace N{
         void user_view();
         void exchange();
         void withdrawsMoney();
-        void transferMoney();
+
+        [[noreturn]] void transferMoney();
         void topUpBills();
         void manageAcc();
+        void change_username(string uname);// for user /admin
+        void change_password(string uname);//for user/admin
         void showBalance();
         void accountDetails();
+        void user_transition();
+        void fill_money();
 
         //for admin
         //variable declare
@@ -77,6 +82,10 @@ namespace N{
         void toShowAdminList();
         void addNewAdmin();
         void option_addNewAdmin();
+        void toShowUserList();
+        void toRecordTransition(string tamount,string tname);
+        void transitionDetails();
+        void manage_user();
     };
 }
 
