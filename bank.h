@@ -4,6 +4,7 @@
 
 #include "iostream"
 #include "ctime"
+#include "cstring"
 using namespace std;
 #ifndef BANK_BANK_H
 #define BANK_BANK_H
@@ -53,11 +54,12 @@ namespace N{
         void exchange();
         void withdrawsMoney();
 
-        [[noreturn]] void transferMoney();
+        void transferMoney();
         void topUpBills();
         void manageAcc();
         void change_username(string uname);// for user /admin
         void change_password(string uname);//for user/admin
+        void delete_acc();
         void showBalance();
         void accountDetails();
         void user_transition();
@@ -86,6 +88,14 @@ namespace N{
         void toRecordTransition(string tamount,string tname);
         void transitionDetails();
         void manage_user();
+        void admin_update_acc();
+        void remove_user();
+        void option_remove_user();
+        void ban_user();
+        void unban_user();
+        void ban_list();
+        void update_userData();
+        void option_ban_user();
     };
 }
 

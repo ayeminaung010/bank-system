@@ -6,5 +6,4 @@ int main() {
     _obj.welcome();
     return 0;
 }
-//admin username pass change need to test
-//add delete account
+//admin remove user testing

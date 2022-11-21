@@ -74,6 +74,7 @@ void bank::login() {
         while (count != 3){
             if(admin_pass == _arr_admin_password[admin_status]){
                 cout<<"Login Success "<<endl;
+                current_index = admin_status;
                 admin_view();
             }else{
                 cout<<"Wrong Password Login Failed Try again!"<<endl;
@@ -300,7 +301,7 @@ void bank::withdrawsMoney() {
     }
 }
 
-[[noreturn]] void bank::transferMoney() {
+void bank::transferMoney() {
     string t_name;
     string t_amount;
     cout<<"Your Balance is :"<<arrAmount[current_index]<<endl;
@@ -400,7 +401,7 @@ void bank::fill_money() {
 
 void bank::manageAcc() {
     string m_option;
-    cout<<"Press 1 to Exit\nPress 2 to change username\nPress 3 to change password\nPress 4 to go back"<<endl;
+    cout<<"Press 1 to Quit\nPress 2 to change username\nPress 3 to change password\nPress 4 to delete account\nPress 5 to go back"<<endl;
     cin>>m_option;
     if(m_option == "1"){
         cout<<"Bye Bye"<<endl;
@@ -410,6 +411,8 @@ void bank::manageAcc() {
     }else if(m_option == "3"){
         change_password(arrUsername[current_index]);
     }else if(m_option == "4"){
+        delete_acc();
+    }else if(m_option == "5"){
         user_view();
     }else{
         cout<<"Invalid input"<<endl;
@@ -500,6 +503,34 @@ void bank::change_password(string uname) {
         }
     }
 
+}
+
+void bank::delete_acc() {
+    string d_option;
+    cout<<"Type YES or NO to delete your account for sure"<<endl;
+    cin>>d_option;
+
+    if(d_option == "YES"){
+        for (int i = 0; i < userNameIndex ; ++i) {
+            arrUsername[current_index] = arrUsername[current_index+1];
+            arrPassword[current_index] = arrPassword[current_index+1];
+            arrAmount[current_index] = arrAmount[current_index+1];
+            arrId[current_index] = arrId[current_index+1];
+        }
+        userNameIndex--;
+        idIndex--;
+        amountIndex--;
+        passwordIndex--;
+        toRecordUserData();
+        cout<<"Successfully deleted...."<<endl;
+        manageAcc();
+    }else if(d_option == "NO"){
+        cout<<"You canceled ..."<<endl;
+        manageAcc();
+    }else{
+        cout<<"Invalid input"<<endl;
+        manageAcc();
+    }
 }
 
 void bank::showBalance() {

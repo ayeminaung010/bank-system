@@ -22,8 +22,8 @@ void bank::toRecordAdminData() {
     ofstream outfile;
     outfile.open(adminDataFile,ios::out);
     if(outfile.is_open()){
-        for (int j = 0; j < _admin_nameIndex ; ++j) {
-            string toRecord = to_string(j+1)+" " + _arr_admin_username[j]+" " + _arr_admin_password[j]+" \n";
+        for (int j = 1; j < _admin_nameIndex ; ++j) {
+            string toRecord = to_string(j)+" " + _arr_admin_username[j]+" " + _arr_admin_password[j]+" \n";
             outfile<<toRecord;
         }
     }else{
@@ -92,7 +92,7 @@ void bank::admin_view() {
     }else if(admin_option == "4"){
         addNewAdmin();
     }else if(admin_option == "5"){
-
+        admin_update_acc();
     }else if(admin_option == "6"){
         cout<<"Bye By Admin"<<endl;
         exit(1);
@@ -174,5 +174,127 @@ void bank::transitionDetails() {
     }else{
         cout<<"No data found!!\nCannot open file!"<<endl;
         exchange();
+    }
+}
+
+void bank::manage_user() {
+    string  mn_option;
+    cout<<"*********Manage User Setting*******"<<endl;
+    cout<<"Press 1 to remove user\nPress 2 to ban user\nPress 3 to unban user\nPress 4 to see Ban lists\nPress 5 to update user data\nPress 6 to go back\nPress 7 to Quit"<<endl;
+    cin>>mn_option;
+    if(mn_option == "1"){
+        remove_user();
+    }else if(mn_option == "2"){
+        ban_user();
+    }else if(mn_option == "3"){
+        unban_user();
+    }else if(mn_option == "4"){
+        ban_list();
+    }else if(mn_option == "5"){
+        update_userData();
+    }else if(mn_option == "6"){
+        admin_view();
+    }else if(mn_option == "7"){
+        cout<<"Bye Bye Admin"<<endl;
+        exit(1);
+    }
+}
+void bank::remove_user() {
+    string rm_username;
+    string rm_option;
+    cout<<"Enter username to remove :"<<endl;
+    cin>>rm_username;
+    int status = toCheckUserName(rm_username);
+    if(status != -1){
+        cout<<"Found User.."<<arrUsername[status]<<endl;
+        cout<<"Press 1 to remove\nPress any number to go back"<<endl;
+        cin>>rm_option;
+        if(rm_option == "1"){
+            for (int i = 0; i <  userNameIndex; ++i) {
+                arrUsername[status] = arrUsername[status +1];
+                arrPassword[status] = arrPassword[status +1];
+                arrAmount[status] = arrAmount[status +1];
+                arrId[status] = arrId[status];
+            }
+            userNameIndex--;
+            passwordIndex--;
+            amountIndex--;
+            idIndex--;
+            toRecordUserData();
+            cout<<"Success Removed..."<<endl;
+            option_remove_user();
+        }else{
+            manage_user();
+        }
+    }else {
+        cout<<"Username not found..."<<endl;
+        option_remove_user();
+    }
+}
+
+void bank::option_remove_user() {
+    string op_rm;
+    cout<<"Press 1 to remove again\nPress 2 to go back"<<endl;
+    cin>>op_rm;
+    if(op_rm == "1"){
+        remove_user();
+    }else if(op_rm == "2"){
+        manage_user();
+    }else {
+      cout<<"Invalid Input"<<endl;
+      option_remove_user();
+    }
+}
+
+void bank::ban_user() {
+    string  b_username;
+    string  b_option;
+    cout<<"Enter username to Ban :"<<endl;
+    cin>>b_username;
+    int status = toCheckUserName(b_username);
+    if(status != -1){
+        cout<<"Found User.."<<arrUsername[status]<<endl;
+        cout<<"Press 1 to ban\nPress any number to go back"<<endl;
+        cin>>b_option;
+        if(b_option == "1"){
+
+        }else{
+            manage_user();
+        }
+    }else{
+        cout<<"Username not found..."<<endl;
+        option_ban_user();
+    }
+}
+
+void bank::option_ban_user() {
+    string b_option;
+    cout<<"Press 1 to ban again\nPress 2 to go back"<<endl;
+    cin>>b_option;
+    if(b_option == "1"){
+        ban_user();
+    }else if(b_option == "2"){
+        manage_user();
+    }else {
+        cout<<"Invalid Input"<<endl;
+        option_ban_user();
+    }
+}
+
+void  bank::admin_update_acc() {
+    string up_option;
+    cout<<"Press 1 to update username\nPress 2 to update password\nPress 3 to go back\nPress 4 to Quit"<<endl;
+    cin>>up_option;
+    if(up_option == "1"){
+        change_username(_arr_admin_username[current_index]);
+    }else if(up_option == "2"){
+        change_password(_arr_admin_username[current_index]);
+    }else if(up_option == "3"){
+        admin_view();
+    }else if(up_option == "4"){
+        cout<<"Bye Bye Admin"<<endl;
+    }else {
+        cout<<"Invalid Input"<<endl;
+        admin_update_acc();
     }
 }
