@@ -6,6 +6,14 @@
 
 #IncludeRegexTransform: 
 
+D:/clone git/Bank/bank.cpp
+bank.h
+D:/clone git/Bank/bank.h
+iostream
+D:/clone git/Bank/iostream
+fstream
+D:/clone git/Bank/fstream
+
 D:/clone git/Bank/bank.h
 iostream
 D:/clone git/Bank/iostream

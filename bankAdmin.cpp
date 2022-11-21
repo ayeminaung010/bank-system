@@ -257,13 +257,111 @@ void bank::ban_user() {
         cout<<"Press 1 to ban\nPress any number to go back"<<endl;
         cin>>b_option;
         if(b_option == "1"){
-
+            arr_ban_u[ban_index] = arrUsername[status];
+            ban_index++;
+            toRecordBanUser();
+            option_ban_user();
         }else{
             manage_user();
         }
     }else{
         cout<<"Username not found..."<<endl;
         option_ban_user();
+    }
+}
+void bank::toRecordBanUser() {
+    string banDataFile = "ban.txt";
+    ofstream outfile;
+    outfile.open(banDataFile,ios::out);
+    if(outfile.is_open()){
+        for (int j = 0; j < ban_index ; ++j) {
+            string toRecord = to_string(j+1)+"."+" " + arr_ban_u[j]+" "+" \n";
+            outfile<<toRecord;
+        }
+    }else{
+        cout<<"cannot open file"<<endl;
+        exit(1);
+    }
+}
+
+
+void bank::loadingBanUser() {
+    string banDataFile = "ban.txt";
+    int count = 0;
+    string data_line; // to store data from one line
+    string data ;//temp data
+    ifstream userFile(banDataFile);
+    if(userFile.is_open()){
+        while (getline(userFile,data_line)){
+            for(auto &ch :data_line){
+                if(ch == ' '){
+                    if(count == 0){
+                        data = "";
+                        count++;
+                    }else if(count == 1){
+                        arr_ban_u[ban_index] = data;
+                        ban_index++;
+                        data = "";
+                        count = 0;
+                    }
+                }else{
+                    string st(1,ch);
+                    data += st;
+                }
+            }
+        }
+    }else{
+        cout<<"File cannot open"<<endl;
+        exit(1);
+    }
+}
+
+void bank::ban_list() {
+    cout<<"This is ban List"<<endl;
+    for (int i = 0; i < ban_index; ++i) {
+        cout<<i+1<<". "<<arr_ban_u[i]<<endl;
+    }
+    manage_user();
+}
+int bank::toCheckBanUser(string uname) {
+    for (int j = 0; j <  ban_index; ++j) {
+        if(arr_ban_u[j] == uname ){
+            return j;
+        }
+    }
+    return -1;
+}
+
+void bank::unban_user() {
+    string  b_username;
+    string ub_option;
+    cout<<"Enter username to remove from ban list"<<endl;
+    cin>>b_username;
+    int status  = toCheckBanUser(b_username);
+    if(status == -1){
+        cout<<"User not found in Bna list"<<endl;
+        cout<<"Press 1 to find again\nPress any number to go back"<<endl;
+        cin>>ub_option;
+        if(ub_option == "1"){
+            unban_user();
+        }else{
+            manage_user();
+        }
+    }else{
+        cout<<"User found "<<arr_ban_u[status]<<endl;
+        cout<<"Press 1 to unban\nPress any number to go back"<<endl;
+        cin>>ub_option;
+        if(ub_option == "1"){
+            for (int k = 0; k < ban_index; ++k) {
+                arr_ban_u[status] = arr_ban_u[status +1];
+            }
+            ban_index--;
+            toRecordBanUser();
+            cout<<"Remove Success from ban list"<<endl;
+            manage_user();
+        }else{
+            manage_user();
+        }
     }
 }
 
@@ -281,6 +379,7 @@ void bank::option_ban_user() {
     }
 }
 
+
 void  bank::admin_update_acc() {
     string up_option;
     cout<<"Press 1 to update username\nPress 2 to update password\nPress 3 to go back\nPress 4 to Quit"<<endl;
@@ -296,5 +395,79 @@ void  bank::admin_update_acc() {
     }else {
         cout<<"Invalid Input"<<endl;
         admin_update_acc();
+    }
+}
+
+
+void bank::update_userData() {
+    string up_option;
+    cout<<"Press 1 to change user's name\nPress 2 to change user's password\nPress 3 to go back\nPress 4 to Quit"<<endl;
+    cin>>up_option;
+    if(up_option == "1"){
+        admin_ch_username();
+    }else if(up_option == "2"){
+        admin_ch_pass();
+    }else if(up_option == "3"){
+        manage_user();
+    }else if(up_option == "4"){
+        cout<<"Bye Bye Admin"<<endl;
+        exit(1);
+    }else{
+        cout<<"Invalid Input"<<endl;
+        update_userData();
+    }
+}
+
+void bank::admin_ch_username() {
+    string  ch_username;
+    string n_username;
+    cout<<"Enter username you want to change "<<endl;
+    cin>>ch_username;
+    int status = toCheckUserName(ch_username);
+    if (status == -1){
+        cout<<"Username not found"<<endl;
+        update_userData();
+    }else{
+        cout<<"Enter new username for :"<<ch_username<<endl;
+        cin>>n_username;
+        int check_status = toCheckUserName(n_username);
+        if(check_status != -1){
+            arrUsername[status] = n_username;
+            toRecordUserData();
+            cout<<"Success changed username..."<<endl;
+            update_userData();
+        }else{
+            cout<<"Username already exits.."<<endl;
+            update_userData();
+        }
+    }
+}
+
+void bank::admin_ch_pass() {
+    string ch_username;
+    string n_password;
+    string c_pass;
+    cout<<"Enter username to change password"<<endl;
+    cin>>ch_username;
+    int status = toCheckUserName(ch_username);
+    if(status == -1){
+        cout<<"Username not found.."<<endl;
+        update_userData();
+    }
+    while (status != -1){
+        cout<<"Enter new password for:"<<ch_username<<endl;
+        cin>>n_password;
+        cout<<"Confirm password:"<<endl;
+        cin>>c_pass;
+        if(n_password == c_pass){
+            arrPassword[status] = n_password;
+            toRecordUserData();
+            cout<<"Password changed Success..."<<endl;
+            update_userData();
+        }
+        while (n_password != c_pass){
+            cout<<"Password not match"<<endl;
+            break;
+        }
     }
 }

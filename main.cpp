@@ -7,3 +7,6 @@ int main() {
     return 0;
 }
 //admin remove user testing
+//ban user test
+//update user data test
+//unban

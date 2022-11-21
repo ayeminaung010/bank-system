@@ -77,6 +77,9 @@ namespace N{
         string _arr_admin_password[10] = {"admin123"};
         string _arr_admin_id[10];
 
+        string arr_ban_u[100];
+        int ban_index = 0;
+
         int toCheckAdmin(string u_name);
         void toRecordAdminData();
         void loadingAdminData();
@@ -94,8 +97,13 @@ namespace N{
         void ban_user();
         void unban_user();
         void ban_list();
+        int toCheckBanUser(string uname);
         void update_userData();
+        void toRecordBanUser();
+        void loadingBanUser();
         void option_ban_user();
+        void admin_ch_username();
+        void admin_ch_pass();
     };
 }
 

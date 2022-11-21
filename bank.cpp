@@ -12,6 +12,7 @@ void bank::welcome() {
     cout<<"Welcome From Our Bank"<<endl;
     loadingAdminData();
     loadingUserData();
+    loadingBanUser();
     toShowUserList();
     toShowAdminList();
     mainMenu();
@@ -43,28 +44,34 @@ void bank::login() {
     cin>>lusername;
     int admin_status = toCheckAdmin(lusername);
     while (admin_status == -1){
-        int status = toCheckUserName(lusername);
-        if (status != -1){
-            cout<<"Found username..\nEnter password to login for "<<lusername<<endl;
-            cin>>lpassword;
-            while (count != 3){
-                if(lpassword == arrPassword[status]){
-                    cout<<"Login Success"<<endl;
-                    current_index = status;
-                    user_view();
-                }else{
-                    cout<<"Wrong Password..Login Failed Try again!"<<endl;
-                    count++;
-                    break;
+        int ban_status = toCheckBanUser(lusername);
+        if(ban_status == -1){
+            int status = toCheckUserName(lusername);
+            if (status != -1){
+                cout<<"Found username..\nEnter password to login for "<<lusername<<endl;
+                cin>>lpassword;
+                while (count != 3){
+                    if(lpassword == arrPassword[status]){
+                        cout<<"Login Success"<<endl;
+                        current_index = status;
+                        user_view();
+                    }else{
+                        cout<<"Wrong Password..Login Failed Try again!"<<endl;
+                        count++;
+                        break;
+                    }
                 }
-            }
-            if(count == 3){
-                cout<<"You wrong 3 times"<<endl;
-                count =0;
+                if(count == 3){
+                    cout<<"You wrong 3 times"<<endl;
+                    count =0;
+                    option_login();
+                }
+            }else{
+                cout<<"Username not Found.."<<endl;
                 option_login();
             }
         }else{
-            cout<<"Username not Found.."<<endl;
+            cout<<"********This account is banned by admin********\nContact Customer Service.. "<<endl;
             option_login();
         }
     }
