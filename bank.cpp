@@ -13,6 +13,7 @@ void bank::welcome() {
     loadingAdminData();
     loadingUserData();
     loadingBanUser();
+//    ban_list();
     toShowUserList();
     toShowAdminList();
     mainMenu();

@@ -4,7 +4,6 @@
 
 #include "iostream"
 #include "ctime"
-#include "cstring"
 using namespace std;
 #ifndef BANK_BANK_H
 #define BANK_BANK_H
@@ -50,20 +49,20 @@ namespace N{
         void loadingUserData();
         void option_login();
 
-        void user_view();
+        void user_view(); //user landing view
         void exchange();
-        void withdrawsMoney();
+        void withdrawsMoney(); // withdraws money
 
-        void transferMoney();
-        void topUpBills();
-        void manageAcc();
+        void transferMoney(); // transfer money from people to people
+        void topUpBills(); // top up ph bills
+        void manageAcc(); //user options to manage acc
         void change_username(string uname);// for user /admin
         void change_password(string uname);//for user/admin
-        void delete_acc();
-        void showBalance();
-        void accountDetails();
-        void user_transition();
-        void fill_money();
+        void delete_acc(); //delete acc for user **
+        void showBalance(); // show balance
+        void accountDetails(); // user acc details
+        void user_transition(); // show user's own transition
+        void fill_money(); // adding money
 
         //for admin
         //variable declare
@@ -80,30 +79,30 @@ namespace N{
         string arr_ban_u[100];
         int ban_index = 0;
 
-        int toCheckAdmin(string u_name);
-        void toRecordAdminData();
-        void loadingAdminData();
-        void admin_view();
-        void toShowAdminList();
-        void addNewAdmin();
+        int toCheckAdmin(string u_name);//check admin or not
+        void toRecordAdminData(); //record admin data
+        void loadingAdminData(); //admin acc data loading
+        void admin_view(); //admin dashboard
+        void toShowAdminList(); //show admin lists
+        void addNewAdmin(); //add new admin
         void option_addNewAdmin();
-        void toShowUserList();
+        void toShowUserList(); //user lists
         void toRecordTransition(string tamount,string tname);
-        void transitionDetails();
-        void manage_user();
-        void admin_update_acc();
-        void remove_user();
+        void transitionDetails(); //show transition data
+        void manage_user(); //user managing options
+        void admin_update_acc(); //admin change username /pass
+        void remove_user(); //remove user
         void option_remove_user();
-        void ban_user();
-        void unban_user();
-        void ban_list();
-        int toCheckBanUser(string uname);
-        void update_userData();
-        void toRecordBanUser();
-        void loadingBanUser();
+        void ban_user(); //ban user
+        void unban_user(); // unban user
+        void ban_list(); // show ban list
+        int toCheckBanUser(string uname); //check ban user or not
+        void update_userData(); // //update user's data options for admin
+        void toRecordBanUser(); //record data for ban user
+        void loadingBanUser();// loading ban user
         void option_ban_user();
-        void admin_ch_username();
-        void admin_ch_pass();
+        void admin_ch_username(); //admin change user's username
+        void admin_ch_pass();//admin change user's pass
     };
 }
 

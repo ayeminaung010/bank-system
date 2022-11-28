@@ -6,21 +6,11 @@
 
 #IncludeRegexTransform: 
 
-D:/clone git/Bank/bank.cpp
-bank.h
-D:/clone git/Bank/bank.h
-iostream
-D:/clone git/Bank/iostream
-fstream
-D:/clone git/Bank/fstream
-
 D:/clone git/Bank/bank.h
 iostream
 D:/clone git/Bank/iostream
 ctime
 D:/clone git/Bank/ctime
-cstring
-D:/clone git/Bank/cstring
 
 D:/clone git/Bank/bankAdmin.cpp
 iostream
@@ -29,4 +19,10 @@ bank.h
 D:/clone git/Bank/bank.h
 fstream
 D:/clone git/Bank/fstream
+
+D:/clone git/Bank/main.cpp
+iostream
+-
+bank.h
+D:/clone git/Bank/bank.h
 

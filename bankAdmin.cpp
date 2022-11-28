@@ -79,7 +79,7 @@ void bank::toShowAdminList() {
 void bank::admin_view() {
     string admin_option;
     cout<<"This is Admin Dashboard"<<endl;
-    cout<<"Press 1 to manage user\nPress 2 to see admin Lists\nPress 3 to see Transition Details\nPress 4 to Add new Admin\nPress 5 to Update account\nPress 6 to exit "<<endl;
+    cout<<"Press 1 to manage user\nPress 2 to see admin Lists\nPress 3 to see Transition Details\nPress 4 to Add new Admin\nPress 5 to Update account\nPress 6 to log out\nPress 7 to exit "<<endl;
     cin>>admin_option;
     if(admin_option == "1"){
         manage_user();
@@ -94,6 +94,8 @@ void bank::admin_view() {
     }else if(admin_option == "5"){
         admin_update_acc();
     }else if(admin_option == "6"){
+        mainMenu();
+    }else if(admin_option == "7"){
         cout<<"Bye By Admin"<<endl;
         exit(1);
     }else{
@@ -275,7 +277,7 @@ void bank::toRecordBanUser() {
     outfile.open(banDataFile,ios::out);
     if(outfile.is_open()){
         for (int j = 0; j < ban_index ; ++j) {
-            string toRecord = to_string(j+1)+"."+" " + arr_ban_u[j]+" "+" \n";
+            string toRecord = to_string(j+1)+"."+" " + arr_ban_u[j]+" "+"\n";
             outfile<<toRecord;
         }
     }else{
@@ -421,7 +423,7 @@ void bank::update_userData() {
 void bank::admin_ch_username() {
     string  ch_username;
     string n_username;
-    cout<<"Enter username you want to change "<<endl;
+    cout<<"Enter username you want to find user "<<endl;
     cin>>ch_username;
     int status = toCheckUserName(ch_username);
     if (status == -1){
@@ -431,7 +433,7 @@ void bank::admin_ch_username() {
         cout<<"Enter new username for :"<<ch_username<<endl;
         cin>>n_username;
         int check_status = toCheckUserName(n_username);
-        if(check_status != -1){
+        if(check_status == -1){
             arrUsername[status] = n_username;
             toRecordUserData();
             cout<<"Success changed username..."<<endl;
@@ -447,7 +449,7 @@ void bank::admin_ch_pass() {
     string ch_username;
     string n_password;
     string c_pass;
-    cout<<"Enter username to change password"<<endl;
+    cout<<"Enter username to Find user :"<<endl;
     cin>>ch_username;
     int status = toCheckUserName(ch_username);
     if(status == -1){
@@ -455,7 +457,7 @@ void bank::admin_ch_pass() {
         update_userData();
     }
     while (status != -1){
-        cout<<"Enter new password for:"<<ch_username<<endl;
+        cout<<"Enter new password to change password for : "<<ch_username<<endl;
         cin>>n_password;
         cout<<"Confirm password:"<<endl;
         cin>>c_pass;
